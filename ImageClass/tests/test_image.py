@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pytest
 
 from image import Image
@@ -24,4 +26,23 @@ def test_image_construct():
     pixel = img.pixels[0, 0]
     assert pixel[0] == 255
     assert pixel[1] == 128
+    assert pixel[2] == 0
+
+
+def test_save_img():
+    img = Image(200, 200, (255, 0, 0))
+    img.save("test.png")
+    assert Path("test.png").exists()
+    Path("test.png").unlink()
+    img.save("test.jpg")
+    assert Path("test.jpg").exists()
+    Path("test.jpg").unlink()
+
+
+def test_pixel_access():
+    img = Image(10, 10, (255, 255, 255))
+    img.set_pixel(0, 0, (128, 0, 0))
+    pixel = img.get_pixel(0, 0)
+    assert pixel[0] == 128
+    assert pixel[1] == 0
     assert pixel[2] == 0
